@@ -1,45 +1,26 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
+import * as React from 'react';
+import { View, Text, Button, Image } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import React from 'react';
-import {
-  Button,
-  Linking,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+const Stack = createNativeStackNavigator();
 
-const App = () => {
+function HomeScreen() {
   return (
-    <View style={styles.body}>
-      <Text style={styles.text}>SpotOps</Text>
-      <Button title="start shredding" onPress={() => {Linking.openURL('https://google.com')}}></Button>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
     </View>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    backgroundColor: '#111111',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  text: {
-    color: Colors.white,
-    fontSize: 40,
-    fontStyle: 'italic',
-    margin: 15
-  }
-})
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="SpotOps" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default App;
