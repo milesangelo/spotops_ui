@@ -2,6 +2,8 @@ import * as React from 'react';
 import { View, Text, Button, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AuthProvider } from './Auth/Contexts/Auth';
+import { Router } from './Auth/Routes/Router';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,11 +17,9 @@ function HomeScreen() {
 
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="SpotOps" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
   );
 }
 
