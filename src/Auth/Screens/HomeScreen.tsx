@@ -10,7 +10,6 @@ export const HomeScreen = () => {
     auth.signOut();
   };
 
-  // Proof of concept - can this communicate with dotnet web api?
   useEffect(() => {
     const getMoviesFromApi = () => {
       return fetch('http://10.0.2.2:5033/WeatherForecast', {
