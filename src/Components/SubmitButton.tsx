@@ -1,30 +1,30 @@
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import React from 'react';
-import { Animated, Pressable, StyleSheet, Text, TouchableNativeFeedback } from 'react-native';
-import { TouchableHighlight, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { StyleSheet, Text } from 'react-native';
+
 
 export default function Button(props: any) {
-    const { onPress, title = 'Submit' } = props;
+    const { onPress, title = 'Submit', disable = false } = props;
 
     return (
-        <TouchableHighlight style={{...styles.button}} onPress={onPress}>
-            <Text style={styles.text}>{title}</Text>
+        <TouchableHighlight style={{...buttonStyles.button}} onPress={onPress} disabled={disable}>
+            <Text style={buttonStyles.text}>{title}</Text>
         </TouchableHighlight>
     )
 }
 
-const styles = StyleSheet.create({
+const buttonStyles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal:50,
-        borderRadius: 4,
-        paddingHorizontal: 12,
-        paddingVertical: 12,
-        backgroundColor: 'purple',
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: '#5916cc',
         elevation: 5,
     },
     text: {
-        margin: 10,
+        margin: 4,
         fontSize: 20,
         lineHeight: 21,
         fontWeight: 'bold',

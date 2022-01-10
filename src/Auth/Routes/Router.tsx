@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 
-import {AppStack} from '../../../AppStack';
+import {AppStack} from './AppStack';
 import {AuthStack} from './AuthStack';
 import {useAuth} from '../Contexts/Auth';
 import {Loading} from '../Components/Loading';
