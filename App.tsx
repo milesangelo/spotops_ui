@@ -7,14 +7,6 @@ import { Router } from './src/Auth/Routes/Router';
 
 const Stack = createNativeStackNavigator();
 
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-    </View>
-  );
-}
-
 function App() {
   return (
     <AuthProvider>
