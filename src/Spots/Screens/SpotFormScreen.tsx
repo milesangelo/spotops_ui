@@ -1,12 +1,14 @@
 // Formik x React Native example
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { Formik } from 'formik';
 import SubmitButton from '../../Components/SubmitButton';
 import {Dropdown} from 'react-native-element-dropdown';
 import spotService from '../Services/SpotService';
+import { AuthContext } from '../../Auth/Contexts/Auth';
 
 export const SpotFormScreen = (props: any) => {
+    const context = useContext(AuthContext);
     const [spotTypes, setSpotTypes] = useState([
         { label: 'Rail', value: 'rail' },
         { label: 'Park', value: 'park' },
