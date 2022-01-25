@@ -4,9 +4,8 @@ import {ActivityIndicator, Button, Text, View} from 'react-native';
 import {styles} from './styles';
 import {useAuth} from '../Contexts/Auth';
 
-import { 
-  GoogleSignin,
-  GoogleSigninButton 
+import {
+  GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
 
 export const SignInScreen = () => {
@@ -23,7 +22,7 @@ export const SignInScreen = () => {
       {loading ? (
         <ActivityIndicator color={'#000'} animating={true} size="large" />
       ) : (
-        <GoogleSigninButton onPress={signIn}/>
+        <GoogleSigninButton onPress={signIn} />
       )}
     </View>
   );
