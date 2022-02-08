@@ -5,18 +5,26 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
-import {AuthData, authService, UserInfo} from '../Services/AuthService';
+import {AuthData, authService} from '../Services/AuthService';
 import {
-  GoogleSignin,
   statusCodes,
-  User,
 } from '@react-native-google-signin/google-signin';
+
 
 type AuthContextData = {
   authData?: AuthData;
   loading: boolean;
-  signIn(): Promise<void>;
+  signIn({email, password}: {email: string; password: string}): Promise<string>;
   signOut(): void;
+};
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const storeData = async (value: any) => {
+  try {
+    await AsyncStorage.setItem('@jwt', value)
+  } catch (e) {
+    // saving error
+  }
 };
 
 //Create the Auth Context with the data type specified
@@ -28,58 +36,85 @@ const AuthProvider: React.FC = ({children}: {children?: ReactNode}) => {
 
   //the AuthContext start with loading equals true
   //and stay like this, until the data be load from Async Storage
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     //Every time the App is opened, this provider is rendered
     //and call de loadStorage function.
-    configureGoogleSignIn();
-
+    
+   
     return function cleanup() {
-      GoogleSignin.signOut();
+      //GoogleSignin.signOut();
     };
   }, []);
 
-  async function configureGoogleSignIn(): Promise<void> {
-    GoogleSignin.configure({
-      scopes: ['email', 'profile'], // what API you want to access on behalf of the user, default is email and profile
-      iosClientId:
-        '390366308918-gepf9o1b6joc3ea28u7hdee8itbb3qns.apps.googleusercontent.com',
-      webClientId:
-        '390366308918-151s654fhgloaol55ljnkid5uqfs05tg.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-      offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-    });
+  /**
+   *
+   */
+  // async function configureGoogleSignIn(): Promise<void> {
+  //   GoogleSignin.configure({
+  //     scopes: ['email', 'profile'], // what API you want to access on behalf of the user, default is email and profile
+  //     iosClientId:
+  //       '390366308918-gepf9o1b6joc3ea28u7hdee8itbb3qns.apps.googleusercontent.com',
+  //     webClientId:
+  //       '390366308918-151s654fhgloaol55ljnkid5uqfs05tg.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+  //     offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+  //   });
 
-    if (await GoogleSignin.isSignedIn()) {
-      await GoogleSignin.signOut();
-    }
+  //   if (await GoogleSignin.isSignedIn()) {
+  //     await GoogleSignin.signOut();
+  //   }
 
-    await GoogleSignin.getCurrentUser().then((userInfo: User | null) => {});
-    setLoading(false);
-  }
+  //   await GoogleSignin.getCurrentUser().then((userInfo: User | null) => {});
+  //   setLoading(false);
+  // }
 
-  const signIn = async () => {
+  /**
+   * 
+   */
+  const signIn = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     try {
-      await GoogleSignin.hasPlayServices();
-      await GoogleSignin.signIn()
-        .then((value: User) =>
-          authService.register(
-            value.user.email,
-            value.user.givenName,
-            value.user.familyName,
-            value.user.email,
-            'P@ssword1',
-          ),
-        )
-        .then((response: UserInfo) => {
-          console.log(response);
-          const authData: AuthData = {
-            email: response.email,
-            name: response.firstname || '',
-            token: '',
-          };
-          setAuthData(authData);
-        });
+      const response = await authService.signIn({email, password})
+      const authResponse = JSON.parse(response);
+      await storeData(authResponse.token);
+      console.log(authResponse.token);
+      setAuthData({ 
+        email: authResponse.email,
+        name: authResponse.name,
+        token: authResponse.token
+       })
+      
+      setLoading(false);
+      return authResponse.name;
+      //return Promise.resolve()
+      //console.log(`${email} with password: ${password}`);
+      // await GoogleSignin.hasPlayServices();
+      // await GoogleSignin.signIn()
+      //   .then((value: User) =>
+      //     authService.register(
+      //       value.user.email,
+      //       value.user.givenName,
+      //       value.user.familyName,
+      //       value.user.email,
+      //       'P@ssword1',
+      //     ),
+      //   )
+      //   .then((response: UserInfo) => {
+      //     console.log(response);
+      //     const authData: AuthData = {
+      //       email: response.email,
+      //       name: response.firstname || '',
+      //       token: '',
+      //     };
+      //     setAuthData(authData);
+      //  });
+      
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -97,13 +132,16 @@ const AuthProvider: React.FC = ({children}: {children?: ReactNode}) => {
     }
   };
 
+  /**
+   *
+   */
   const signOut = async () => {
     try {
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut()
-        .then
-        //authService.signOut()
-        ();
+      //  await GoogleSignin.revokeAccess();
+      //  await GoogleSignin.signOut()
+      //    .then
+      //authService.signOut()
+      //    ();
       setAuthData(undefined);
     } catch (error) {
       console.error(error);
