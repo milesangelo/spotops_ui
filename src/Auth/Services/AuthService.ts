@@ -57,7 +57,7 @@ const signIn = async ({ email, password }: { email: string, password: string }):
       'email': email,
       'password': password
     })
-  })
+  });
   
   const data = await response.text();
   
