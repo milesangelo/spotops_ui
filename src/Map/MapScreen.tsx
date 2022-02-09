@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import MapView, { PROVIDER_DEFAULT }from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 const styles = StyleSheet.create({
  container: {
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 export default () => (
    <View style={styles.container}>
      <MapView
-       provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+       provider={PROVIDER_DEFAULT} // remove if not using Google Maps
        style={styles.map}
        region={{
          latitude: 39.965281,
