@@ -4,18 +4,25 @@
 
 ## Road Map
 
-- ✨Splash Screen
-    - On app load ( //todo )
-- ✅Login Screen
+### 2/13/2022
+- Add project components to readme with road map
+
+
+
+## Project Components
+
+- ✨Splash Screen 
+    - On app load 
+- ✅Login Screen 
     - Prompts user for username/email & password
     - Forgot password
     - Register 
-- ✨Forgot password process
+- ✨Forgot password process 
     - User enters email, password is reset with email sent.
 - 🚧Register Screen (first & last name, username will be email)
     - Prompts user for first and last name, email, and password.
     - Adding avatar
-- 🚧Home page
+- 🚧Home page 
     - Pancake stack menu button
         - Spots
         - Groups
@@ -29,3 +36,4 @@
     - Opens phone camera, requires at least one photo.
     - Prompts for name, type, and groups to add to.
     - Collects location data from phone.
+
