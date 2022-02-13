@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { ApiUrlResolver } from "../../Services/UrlResolver";
 
 export type AuthData = {
   token: string;
@@ -6,16 +6,13 @@ export type AuthData = {
   name: string;
 };
 
-const fullUrl: string = (Platform.OS === 'ios' ?
-  'http://localhost:6001/api' : 'http://10.0.2.2:6001/api').concat('/user');
-
 /**
  * 
  * @param param0 
  * @returns 
  */
 const register = async ({ name, email, password }: { name: string, email: string, password: string }): Promise<string> => {
-  const response = await fetch(fullUrl.concat('/register'), {
+  const response = await fetch(ApiUrlResolver.append('/user/register'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -47,20 +44,20 @@ const register = async ({ name, email, password }: { name: string, email: string
  * @param param0 
  */
 const signIn = async ({ email, password }: { email: string, password: string }): Promise<string> => {
-  const response = await fetch(fullUrl.concat('/login'), {
+  const response = await fetch(ApiUrlResolver.append('/user/login'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    credentials: 'include',
+    //credentials: 'include',
     body: JSON.stringify({
       'email': email,
       'password': password
     })
   });
-  
+
   const data = await response.text();
-  
+
   if (response.ok) {
     if (data) {
       console.log(`signin response data: ${data}`)

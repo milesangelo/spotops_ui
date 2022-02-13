@@ -6,10 +6,10 @@ import React, {
   ReactNode,
 } from 'react';
 import {AuthData, authService} from '../Services/AuthService';
-import {
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import {statusCodes} from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import globals from '../../globals.json';
 
 type AuthContextData = {
   authData?: AuthData;
@@ -17,11 +17,10 @@ type AuthContextData = {
   signIn({email, password}: {email: string; password: string}): Promise<string>;
   signOut(): void;
 };
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const storeData = async (value: any) => {
   try {
-    await AsyncStorage.setItem('@jwt', value)
+    await AsyncStorage.setItem(globals.JwtStorageKey, value);
   } catch (e) {
     // saving error
   }
@@ -39,14 +38,19 @@ const AuthProvider: React.FC = ({children}: {children?: ReactNode}) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    //Every time the App is opened, this provider is rendered
-    //and call de loadStorage function.
-    
-   
+    isSignedIn();
+
     return function cleanup() {
       //GoogleSignin.signOut();
     };
   }, []);
+
+  async function isSignedIn(): Promise<void> {
+    // We want to check asyncstorage for a jwt &
+    // make an api call to the user/user endpoint
+    // to find out whether or not the jwt is still
+    // valid or not.
+  }
 
   /**
    *
@@ -70,7 +74,7 @@ const AuthProvider: React.FC = ({children}: {children?: ReactNode}) => {
   // }
 
   /**
-   * 
+   *
    */
   const signIn = async ({
     email,
@@ -80,16 +84,16 @@ const AuthProvider: React.FC = ({children}: {children?: ReactNode}) => {
     password: string;
   }) => {
     try {
-      const response = await authService.signIn({email, password})
+      const response = await authService.signIn({email, password});
       const authResponse = JSON.parse(response);
       await storeData(authResponse.token);
       console.log(authResponse.token);
-      setAuthData({ 
+      setAuthData({
         email: authResponse.email,
         name: authResponse.name,
-        token: authResponse.token
-       })
-      
+        token: authResponse.token,
+      });
+
       setLoading(false);
       return authResponse.name;
       //return Promise.resolve()
@@ -114,7 +118,6 @@ const AuthProvider: React.FC = ({children}: {children?: ReactNode}) => {
       //     };
       //     setAuthData(authData);
       //  });
-      
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -137,6 +140,8 @@ const AuthProvider: React.FC = ({children}: {children?: ReactNode}) => {
    */
   const signOut = async () => {
     try {
+
+      await AsyncStorage.removeItem(globals.JwtStorageKey);
       //  await GoogleSignin.revokeAccess();
       //  await GoogleSignin.signOut()
       //    .then

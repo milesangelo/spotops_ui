@@ -1,7 +1,7 @@
 import { FlatList } from 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import { Button, Text, View } from 'react-native';
-import { styles } from '../../Auth/Screens/styles';
+import { styles } from '../../styles';
 import { useAuth } from '../../Auth/Contexts/Auth';
 
 export const SpotListScreen = () => {
