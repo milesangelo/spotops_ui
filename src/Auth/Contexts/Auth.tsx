@@ -5,8 +5,8 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
-import {AuthData, authService} from '../Services/AuthService';
-import {statusCodes} from '@react-native-google-signin/google-signin';
+import { AuthData, authService } from '../Services/AuthService';
+import { statusCodes } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import globals from '../../globals.json';
@@ -15,6 +15,7 @@ import { Alert } from 'react-native';
 type AuthContextData = {
   authData?: AuthData;
   loading: boolean;
+  register({firstname, lastname, email, password}: { firstname: string, lastname: string, email: string, password: string}): Promise<boolean>;
   signIn({ email, password }: { email: string; password: string }): Promise<boolean>;
   signOut(): void;
 };
@@ -54,6 +55,24 @@ const AuthProvider: React.FC = ({ children }: { children?: ReactNode }) => {
     // to find out whether or not the jwt is still
     // valid or not.
   }
+
+  const register = async ({ firstname, lastname, email, password }:
+    { firstname: string, lastname: string, email: string, password: string }) => {
+      try {
+        const response = await authService.register({firstname, lastname, email, password});
+        const registerResponse = JSON.parse(response);
+        if (registerResponse.isRegistered){
+          return true;
+        } else {
+          Alert.alert(registerResponse.message);
+          return false;
+        }
+      } catch (ex) {
+
+        return false;
+      }
+  }
+
 
   /**
    *  Sets authdata if signin request is authorized,
@@ -112,7 +131,7 @@ const AuthProvider: React.FC = ({ children }: { children?: ReactNode }) => {
   return (
     //This component will be used to encapsulate the whole App,
     //so all components will have access to the Context
-    <AuthContext.Provider value={{ authData, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ authData, loading, register, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
