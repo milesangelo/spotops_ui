@@ -49,7 +49,6 @@ const signIn = async ({ email, password }: { email: string, password: string }):
     headers: {
       'Content-Type': 'application/json',
     },
-    //credentials: 'include',
     body: JSON.stringify({
       'email': email,
       'password': password
