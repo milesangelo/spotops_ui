@@ -1,68 +1,104 @@
-import React, {useState} from 'react';
-import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import React, { useState } from 'react';
+import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { authService } from '../Services/AuthService';
+import { Loading } from '../Components/Loading';
+import { useAuth } from '../Contexts/Auth';
 
-export type AuthStackParamList = {
-  RegisterScreen: undefined;
-  Login: undefined;
-};
+//export type AuthStackParamList = {
+//   RegisterScreen: undefined;
+//   Login: undefined;
+// };
 
-export interface IAuthStackScreenProps {
-  navigation: NativeStackNavigationProp<AuthStackParamList, 'RegisterScreen'>;
-}
+// export interface IAuthStackScreenProps {
+//   navigation: NativeStackNavigationProp<AuthStackParamList, 'RegisterScreen'>;
+// }
 
-export const RegisterScreen = ({navigation}: any) => {
+export const RegisterScreen = ({ navigation }: any) => {
   const [registering, setRegistering] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setpassword] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
 
-  const register = () => {
-    console.log(`${name}, ${email}, ${password}`)
-    authService.register({name, email, password})
-    navigation.navigate('Login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const auth = useAuth();
+
+  const register = async () => {
+    setRegistering(true);
+    console.log(`${firstname}, ${email}, ${password}`);
+    await auth.register({ firstname, lastname, email, password })
+      .then(success => {
+        setRegistering(false);
+        if (success) {     
+          Alert.alert('Successful registration!');
+          navigation.navigate('Login');
+        }
+      })
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>SpotOps</Text>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Name..."
-          placeholderTextColor="#CEE6EF"
-          onChangeText={text => {
-            setName(text);
-          }}
-        />
+  function renderRegister() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.logo}>SpotOps</Text>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            value={firstname}
+            placeholder="First name..."
+            placeholderTextColor="#CEE6EF"
+            onChangeText={text => {
+              setFirstname(text);
+            }}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            defaultValue={lastname}
+            placeholder="Last name..."
+            placeholderTextColor="#CEE6EF"
+            onChangeText={text => {
+              setLastname(text);
+            }}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            defaultValue={email}
+            placeholder="Email..."
+            placeholderTextColor="#CEE6EF"
+            onChangeText={text => setEmail(text)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            secureTextEntry
+            style={styles.inputText}
+            placeholder="Password..."
+            placeholderTextColor="#CEE6EF"
+            onChangeText={text => {
+              setPassword(text);
+            }}
+          />
+        </View>
+        <TouchableOpacity style={styles.loginBtn} onPress={() => register()}>
+          <Text style={styles.loginText}>REGISTER</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Email..."
-          placeholderTextColor="#CEE6EF"
-          onChangeText={text => setEmail(text)}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          secureTextEntry
-          style={styles.inputText}
-          placeholder="Password..."
-          placeholderTextColor="#CEE6EF"
-          onChangeText={text => {
-            setpassword(text);
-          }}
-        />
-      </View>
-      <TouchableOpacity style={styles.loginBtn} onPress={() => register()}>
-        <Text style={styles.loginText}>REGISTER</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    )
+  }
+
+  if (registering) {
+    return <Loading />;
+  } else {
+    return (renderRegister());
+  }
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
