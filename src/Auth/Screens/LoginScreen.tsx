@@ -4,7 +4,7 @@ import { useAuth } from '../Contexts/Auth';
 
 import { styles } from '../../styles';
 import { TextInput } from 'react-native-gesture-handler';
-import { Loading } from '../Components/Loading';
+import { Loading } from '../../Components/Loading';
 
 export const LoginScreen = ({ navigation }: any) => {
   const [loading, isLoading] = useState(false);

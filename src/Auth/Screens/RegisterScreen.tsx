@@ -3,7 +3,7 @@ import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-n
 import { TextInput } from 'react-native-gesture-handler';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { authService } from '../Services/AuthService';
-import { Loading } from '../Components/Loading';
+import { Loading } from '../../Components/Loading';
 import { useAuth } from '../Contexts/Auth';
 
 //export type AuthStackParamList = {

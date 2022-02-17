@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, ScrollView, Dimensions, StyleSheet} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Colors, Sizes } from '../theme';
+
 export const HomeScreen = ({navigation}: any) => {
     return(
         <View style={{
