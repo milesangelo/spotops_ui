@@ -11,10 +11,11 @@ export const Router = () => {
 
   if (loading) {
     return <Loading />;
+  } else {
+    return (
+      <NavigationContainer>
+        {authData ? <AppStack name={authData.name}/> : <AuthStack/>}
+      </NavigationContainer>
+    )
   }
-  return (
-    <NavigationContainer>
-      {authData ? <AppStack name={authData.name} /> : <AuthStack />}
-    </NavigationContainer>
-  );
 };

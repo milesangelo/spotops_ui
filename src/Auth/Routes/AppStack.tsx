@@ -1,9 +1,6 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import { HomeScreen } from '../../Home/HomeScreen';
 import MapScreen from '../../Map/MapScreen';
-import DrawerNavigator from '../../Components/Navigators/DrawerNavigator';
-
 
 const Stack = createStackNavigator();
 
@@ -13,7 +10,6 @@ function capitalizeFirstLetter(name: string) {
 
 export const AppStack = ({name}: {name: string}) => {
   return (
-    // <DrawerNavigator />
     <Stack.Navigator>
       <Stack.Screen
         name={`Welcome to SpotOps, ${capitalizeFirstLetter(name)}!`}

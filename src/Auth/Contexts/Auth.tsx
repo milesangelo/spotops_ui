@@ -86,20 +86,21 @@ const AuthProvider: React.FC = ({ children }: { children?: ReactNode }) => {
     password: string;
   }) => {
     try {
+      setLoading(true);
       const response = await authService.signIn({ email, password });
       const authResponse = JSON.parse(response);
       if (authResponse?.isAuthenticated) {
         await storeJwt(authResponse.token);
         console.log(authResponse.token);
+        setLoading(false);
         setAuthData({
           email: authResponse.email,
           name: authResponse.name,
           token: authResponse.token,
         });
-        setLoading(false);
         return true;
       } else {
-        Alert.alert(authResponse.message)
+        Alert.alert(authResponse.message);
         return false;
       }
     } catch (error: any) {
@@ -112,6 +113,7 @@ const AuthProvider: React.FC = ({ children }: { children?: ReactNode }) => {
       } else {
         console.warn(error);
       }
+      setLoading(false);
       return false;
     }
   };

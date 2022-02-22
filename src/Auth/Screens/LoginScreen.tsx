@@ -7,7 +7,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Loading } from '../../Components/Loading';
 
 export const LoginScreen = ({ navigation }: any) => {
-  const [loading, isLoading] = useState(false);
+ // const [loading, isLoading] = useState(false);
 
   const [loginInfo, setLoginInfo] = useState({
     email: '',
@@ -23,9 +23,9 @@ export const LoginScreen = ({ navigation }: any) => {
     email: string;
     password: string;
   }) => {
-    isLoading(true);
+    //isLoading(true);
     await auth.signIn({ email, password })
-      .then(success => isLoading(false));
+     // .then(success => isLoading(false));
   };
 
   function renderLogin() {
@@ -72,8 +72,8 @@ export const LoginScreen = ({ navigation }: any) => {
     </View>);
   };
 
-  if (loading) {
-    return <Loading />;
+  if (auth.loading) {
+    return <Loading/>;
   } else {
     return renderLogin();
   }
